@@ -2,10 +2,31 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.ico" />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+		/>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
 	</head>
+	<style>
+		* {
+			font-family: 'Roboto', sans-serif;
+		}
+		html {
+			margin: 0;
+			height: 100%;
+		}
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #f6f8fc;
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+		}
+	</style>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
