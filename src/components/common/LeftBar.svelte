@@ -11,7 +11,7 @@
 		<span class="material-symbols-outlined"> subscriptions </span>
 		<p>Iscrizioni</p>
 	</a>
-	<a href="/" class="icon">
+	<a href="/liked" class="icon">
 		<span class="material-symbols-outlined"> video_library </span>
 		<p>Tu</p>
 	</a>

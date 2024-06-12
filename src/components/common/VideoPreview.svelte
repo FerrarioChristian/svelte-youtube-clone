@@ -1,6 +1,7 @@
-<script>
+<script lang="ts">
 	import { videos } from '$lib/homepageVideos';
-	export let user;
+	import type { User } from '$lib/types/index';
+	export let user: User;
 </script>
 
 <article class="video-container">

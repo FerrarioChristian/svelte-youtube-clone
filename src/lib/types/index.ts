@@ -13,13 +13,13 @@ export type User = {
 
 export type Comment = {
 	id: number;
-	title: string;
+	title?: string;
 	body: string;
-	tags: string[];
-	reactions: {
+	tags?: string[];
+	reactions?: {
 		likes: number;
 		dislikes: number;
 	};
-	views: number;
+	views?: number;
 	userId: number;
 };

@@ -3,10 +3,17 @@
 	import CommentItem from './CommentItem.svelte';
 	import type { Comment } from '$lib/types';
 	import { browser } from '$app/environment';
+	import NewComment from './NewComment.svelte';
+	import { myComments } from '$lib/stores/myComments';
 
 	let page = 0;
 	let comments: Comment[] = [];
+	let myCom: Comment[] = [];
 	let hasMore = true;
+
+	myComments.subscribe((value) => {
+		myCom = value;
+	});
 
 	const fetchComments = async () => {
 		const res = await fetch(`https://dummyjson.com/posts?limit=3&skip=${page * 3}`);
@@ -44,6 +51,12 @@
 
 <h3>Commenti</h3>
 <div>
+	<NewComment />
+	{#if myCom.length > 0}
+		{#each myCom as comment}
+			<CommentItem {comment} />
+		{/each}
+	{/if}
 	{#if comments.length > 0}
 		{#each comments as comment}
 			<CommentItem {comment} />

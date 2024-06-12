@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { subscriptions } from '$lib/stores/subscriptions';
+	import { likedVideos } from '$lib/stores/likedVideos';
 
 	export let currentVideo;
 	export let currentChannel;
@@ -9,6 +10,14 @@
 			return subs.includes(currentChannel.id)
 				? subs.filter((id) => id !== currentChannel.id)
 				: [...subs, currentChannel.id];
+		});
+	};
+
+	const handleLike = () => {
+		likedVideos.update((vid: string[]) => {
+			return vid.includes(currentVideo.id)
+				? vid.filter((id) => id !== currentVideo.id)
+				: [...vid, currentVideo.id];
 		});
 	};
 </script>
@@ -29,7 +38,7 @@
 			<button on:click={handleSubscribe}>Iscriviti</button>
 		{/if}
 		<div class="buttons-container">
-			<button>Like</button>
+			<button on:click={handleLike}>Like</button>
 			<button>Dislike</button>
 			<button>Condividi</button>
 		</div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { loginStatus } from '$lib/loginStatus';
+	import { loginStatus } from '$lib/stores/loginStatus';
 	import { onDestroy } from 'svelte';
 
 	let username: string;

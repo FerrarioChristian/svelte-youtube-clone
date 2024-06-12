@@ -1,16 +1,24 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { User } from '$lib/types';
+	import { loginStatus } from '$lib/stores/loginStatus';
+	import { get } from 'svelte/store';
 
 	export let comment;
 	$: user = {} as User;
 
 	let readmore = false;
 
+	let loginStatusData = get(loginStatus);
+
 	onMount(async () => {
-		const res = await fetch(`https://dummyjson.com/users/${comment.userId}`);
-		const result = await res.json();
-		user = result;
+		if (comment.userId === 0) {
+			user = loginStatusData.userData;
+		} else {
+			const res = await fetch(`https://dummyjson.com/users/${comment.userId}`);
+			const result = await res.json();
+			user = result;
+		}
 	});
 </script>
 
