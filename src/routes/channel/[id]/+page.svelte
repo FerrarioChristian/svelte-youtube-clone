@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { subscriptions } from '$lib/subscriptions';
+	import { subscriptions } from '$lib/stores/subscriptions';
 
 	export let data: PageData;
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import VideoPreview from '$lib/VideoPreview.svelte';
-	import CategoryChips from './CategoryChips.svelte';
+	import VideoPreview from '../components/common/VideoPreview.svelte';
+	import CategoryChips from '../components/ui/CategoryChips.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import PostItem from './PostItem.svelte';
+	import PostItem from '../../../../components/routes-components/channel/community/PostItem.svelte';
 
 	export let data: PageData;
 </script>

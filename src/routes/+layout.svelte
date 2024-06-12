@@ -1,6 +1,6 @@
 <script>
-	import LeftBar from './LeftBar.svelte';
-	import NavBar from './NavBar.svelte';
+	import LeftBar from '../components/common/LeftBar.svelte';
+	import NavBar from '../components/common/NavBar.svelte';
 </script>
 
 <NavBar />

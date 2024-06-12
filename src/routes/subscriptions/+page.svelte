@@ -1,17 +1,7 @@
 <script lang="ts">
-	import { subscriptions } from '$lib/subscriptions';
+	import { subscriptions } from '$lib/stores/subscriptions';
 
-	interface Data {
-		users: {
-			id: number;
-			firstName: string;
-			lastName: string;
-			username: string;
-			image: string;
-		}[];
-	}
-
-	export let data: Data;
+	export let data;
 	$: subscribedChannels = data.users.filter((user) => $subscriptions.includes(user.id));
 
 	const unsubscribe = async (id: number) => {
