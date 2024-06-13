@@ -1,6 +1,26 @@
 <script lang="ts">
 	import { myComments } from '$lib/stores/myComments';
-	import type { Comment } from '$lib/types';
+	import type { Comment, LoginStatus } from '$lib/types';
+	import { loginStatus } from '$lib/stores/loginStatus';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+
+	let loginData: LoginStatus;
+
+	onMount(() => {
+		loginStatus.subscribe((value) => {
+			loginData = value;
+		});
+
+		fetch('https://dummyjson.com/auth/me', {
+			method: 'GET',
+			headers: {
+				Authorization: loginData.authKey ?? ''
+			}
+		})
+			.then((res) => res.json())
+			.then(console.log);
+	});
 
 	let body = '';
 
@@ -9,25 +29,31 @@
 	};
 
 	const comment = () => {
-		myComments.update((comments: Comment[]) => [
-			{
-				id: Math.floor(Math.random() * 1000 + 200),
-				body,
-				userId: 0
-			},
-			...comments
-		]);
+		if (loginData.isLogged === true) {
+			myComments.update((comments: Comment[]) => [
+				{
+					id: Math.floor(Math.random() * 1000 + 200),
+					body,
+					userId: loginData.userData!.id
+				},
+				...comments
+			]);
+		} else {
+			alert('Devi essere loggato per commentare');
+			goto('/login');
+		}
+
 		body = '';
 	};
 </script>
 
 <div class="new-comment-container">
-	<img src="/pro-pic.png" alt="" />
+	<img src={loginData?.userData?.image ?? '/pro-pic.png'} alt="" />
 	<div class="text-buttons-container">
-		<textarea bind:value={body} name="comment"></textarea>
+		<textarea bind:value={body} name="comment" placeholder="Aggiungi un commento..."></textarea>
 		<div class="button-container">
 			<button on:click={cancel}>Annulla</button>
-			<button on:click={comment}>Commenta</button>
+			<button on:click={comment} disabled={!body.length}>Commenta</button>
 		</div>
 	</div>
 </div>
@@ -80,6 +106,10 @@
 
 	button:last-child:hover {
 		background-color: #0556bf;
+	}
+
+	button:last-child:disabled {
+		background-color: #aaa;
 	}
 
 	textarea {

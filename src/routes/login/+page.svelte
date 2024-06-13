@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { loginStatus } from '$lib/stores/loginStatus';
 	import { onDestroy } from 'svelte';
 
@@ -25,29 +26,33 @@
 			});
 
 			if (!response.ok) {
-				throw new Error('Login failed');
+				throw new Error('Login failed ## TODO');
 			}
 
 			const data = await response.json();
 
-			await loginStatus.update((status) => ({
-				...status,
+			await loginStatus.update(() => ({
 				authKey: data.token,
 				userData: data,
 				isLogged: true
 			}));
+
+			username = '';
+			password = '';
+			goto('/');
 		} catch (error) {
 			console.error(error);
-			await loginStatus.update((status) => ({
-				isLogged: false,
-				authKey: '',
-				userData: {}
+			await loginStatus.update(() => ({
+				isLogged: false
 			}));
+			username = '';
+			password = '';
+			goto('/');
 		}
 	};
 
 	const logout = () => {
-		loginStatus.update(() => ({ isLogged: false, authKey: '', userData: {} }));
+		loginStatus.update(() => ({ isLogged: false }));
 	};
 </script>
 

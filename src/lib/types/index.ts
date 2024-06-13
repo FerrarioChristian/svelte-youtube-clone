@@ -23,3 +23,9 @@ export type Comment = {
 	views?: number;
 	userId: number;
 };
+
+export type LoginStatus = {
+	isLogged: boolean;
+	userData?: User;
+	authKey?: string;
+};
