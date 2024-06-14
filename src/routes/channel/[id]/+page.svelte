@@ -1,15 +1,32 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { loginStatus } from '$lib/stores/loginStatus';
 	import { subscriptions } from '$lib/stores/subscriptions';
+	import type { Subscription } from '$lib/types';
+	import { get } from 'svelte/store';
+	import { onDestroy } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
+	let user = get(loginStatus).userData;
+
+	const unsubscribe = loginStatus.subscribe((value) => {
+		user = value.userData;
+	});
+
+	onDestroy(unsubscribe);
 
 	const handleSubscribe = () => {
-		subscriptions.update((subs: number[]) => {
-			return subs.includes(data.user.id)
-				? subs.filter((id) => id !== data.user.id)
-				: [...subs, data.user.id];
-		});
+		if (!user) {
+			alert('Devi essere loggato per iscriverti a un canale');
+			goto('/login');
+		} else {
+			subscriptions.update((subs: Subscription[]) => {
+				return subs.some((sub) => sub.subscriberId === user!.id && sub.channelId === data.user.id)
+					? subs.filter((sub) => !(sub.subscriberId === user!.id && sub.channelId === data.user.id))
+					: [...subs, { subscriberId: user!.id, channelId: data.user.id }];
+			});
+		}
 	};
 </script>
 
@@ -17,7 +34,7 @@
 <h1>{data.user.firstName} {data.user.lastName}</h1>
 <h2>@{data.user.username}</h2>
 
-{#if $subscriptions.includes(data.user.id)}
+{#if user && $subscriptions.some((sub) => sub.subscriberId === user?.id && sub.channelId === data.user.id)}
 	<p>Sei iscritto a questo canale</p>
 	<button on:click={handleSubscribe}>Disiscriviti</button>
 {:else}

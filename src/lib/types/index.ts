@@ -24,8 +24,24 @@ export type Comment = {
 	userId: number;
 };
 
+export type Video = {
+	id: string;
+	title: string;
+	channelId: number;
+};
+
 export type LoginStatus = {
 	isLogged: boolean;
 	userData?: User;
 	authKey?: string;
+};
+
+export type Subscription = {
+	subscriberId: number;
+	channelId: number;
+};
+
+export type LikedVideo = {
+	likerId: number;
+	videoId: string;
 };

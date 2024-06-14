@@ -3,7 +3,6 @@
 	import type { User } from '$lib/types';
 	import { loginStatus } from '$lib/stores/loginStatus';
 	import { myComments } from '$lib/stores/myComments';
-	import NewComment from './NewComment.svelte';
 
 	export let comment;
 	$: user = {} as User;
@@ -14,10 +13,14 @@
 
 	let commentBackup = comment.body;
 
-	onMount(async () => {
+	const fetchUser = async () => {
 		const res = await fetch(`https://dummyjson.com/users/${comment.userId}`);
 		const result = await res.json();
 		user = result;
+	};
+
+	onMount(() => {
+		fetchUser();
 	});
 
 	const submitEditedComment = () => {

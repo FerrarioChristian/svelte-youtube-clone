@@ -1,12 +1,25 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { loginStatus } from '$lib/stores/loginStatus.js';
 	import { subscriptions } from '$lib/stores/subscriptions';
+	import type { Subscription } from '$lib/types/index.js';
+	import { get } from 'svelte/store';
 
 	export let data;
-	$: subscribedChannels = data.users.filter((user) => $subscriptions.includes(user.id));
+	let currentUser = get(loginStatus).userData;
+
+	$: if (!currentUser) {
+		alert('Devi essere loggato per vedere le tue iscrizioni');
+		goto('/login');
+	}
+
+	$: subscribedChannels = data.users.filter((user) =>
+		$subscriptions.some((sub) => sub.channelId === user.id && sub.subscriberId === currentUser?.id)
+	);
 
 	const unsubscribe = async (id: number) => {
-		subscriptions.update((subs: number[]) => {
-			return subs.filter((sub) => sub !== id);
+		subscriptions.update((subs: Subscription[]) => {
+			return subs.filter((sub) => !(sub.subscriberId === currentUser?.id && sub.channelId === id));
 		});
 	};
 </script>

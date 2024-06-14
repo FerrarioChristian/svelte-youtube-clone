@@ -8,12 +8,9 @@
 
 	let page = 0;
 	let comments: Comment[] = [];
-	let myCom: Comment[] = [];
 	let hasMore = true;
 
-	myComments.subscribe((value) => {
-		myCom = value;
-	});
+	let component;
 
 	const fetchComments = async () => {
 		const res = await fetch(`https://dummyjson.com/posts?limit=3&skip=${page * 3}`);
@@ -50,13 +47,16 @@
 </script>
 
 <h3>Commenti</h3>
-<div>
-	<NewComment />
-	{#if myCom.length > 0}
-		{#each myCom as comment}
+
+<NewComment />
+<div class="reverse">
+	{#if $myComments.length > 0}
+		{#each $myComments as comment}
 			<CommentItem {comment} />
 		{/each}
 	{/if}
+</div>
+<div>
 	{#if comments.length > 0}
 		{#each comments as comment}
 			<CommentItem {comment} />
@@ -68,8 +68,7 @@
 
 <style>
 	h3 {
-		margin: 0;
-		margin-top: 3rem;
+		margin-block: 3rem;
 	}
 
 	div {
@@ -77,5 +76,13 @@
 		flex-direction: column;
 		gap: 3rem;
 		padding-block: 2rem;
+	}
+
+	.reverse {
+		padding: 0;
+		min-height: 0;
+		display: flex;
+		flex-direction: column-reverse;
+		margin-top: 1rem;
 	}
 </style>

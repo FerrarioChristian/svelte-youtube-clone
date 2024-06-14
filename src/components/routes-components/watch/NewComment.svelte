@@ -11,17 +11,7 @@
 		loginStatus.subscribe((value) => {
 			loginData = value;
 		});
-
-		fetch('https://dummyjson.com/auth/me', {
-			method: 'GET',
-			headers: {
-				Authorization: loginData.authKey ?? ''
-			}
-		})
-			.then((res) => res.json())
-			.then(console.log);
 	});
-
 	let body = '';
 
 	const cancel = () => {
@@ -31,12 +21,12 @@
 	const comment = () => {
 		if (loginData.isLogged === true) {
 			myComments.update((comments: Comment[]) => [
+				...comments,
 				{
 					id: Math.floor(Math.random() * 1000 + 200),
 					body,
 					userId: loginData.userData!.id
-				},
-				...comments
+				}
 			]);
 		} else {
 			alert('Devi essere loggato per commentare');
@@ -114,7 +104,6 @@
 
 	textarea {
 		height: 1rem;
-		width: 100%;
 		padding: 0.5rem;
 		border: none;
 		background-color: transparent;

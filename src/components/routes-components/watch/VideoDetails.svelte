@@ -1,23 +1,50 @@
 <script lang="ts">
 	import { subscriptions } from '$lib/stores/subscriptions';
 	import { likedVideos } from '$lib/stores/likedVideos';
+	import { loginStatus } from '$lib/stores/loginStatus';
+	import { get } from 'svelte/store';
+	import { onDestroy } from 'svelte';
+	import type { LikedVideo, Subscription } from '$lib/types';
+	import { goto } from '$app/navigation';
 
 	export let currentVideo;
 	export let currentChannel;
+	let user = get(loginStatus).userData;
+
+	const unsubscribe = loginStatus.subscribe((value) => {
+		user = value.userData;
+	});
+
+	onDestroy(unsubscribe);
 
 	const handleSubscribe = () => {
-		subscriptions.update((subs: number[]) => {
-			return subs.includes(currentChannel.id)
-				? subs.filter((id) => id !== currentChannel.id)
-				: [...subs, currentChannel.id];
-		});
+		if (!user) {
+			alert('Devi essere loggato per iscriverti a un canale');
+			goto('/login');
+		} else {
+			subscriptions.update((subs: Subscription[]) => {
+				return subs.some(
+					(sub) => sub.subscriberId === user!.id && sub.channelId === currentChannel.id
+				)
+					? subs.filter(
+							(sub) => !(sub.subscriberId === user!.id && sub.channelId === currentChannel.id)
+						)
+					: [...subs, { subscriberId: user!.id, channelId: currentChannel.id }];
+			});
+		}
 	};
 
 	const handleLike = () => {
-		likedVideos.update((vid: string[]) => {
-			return vid.includes(currentVideo.id)
-				? vid.filter((id) => id !== currentVideo.id)
-				: [...vid, currentVideo.id];
+		if (!user) {
+			alert('Devi essere loggato per iscriverti a un canale');
+			goto('/login');
+		} else {
+		}
+		likedVideos.update((vids: LikedVideo[]) => {
+			console.log(user);
+			return vids.some((vid) => vid.likerId === user!.id && vid.videoId === currentVideo.id)
+				? vids.filter((vid) => !(vid.likerId === user!.id && vid.videoId === currentVideo.id))
+				: [...vids, { likerId: user!.id, videoId: currentVideo.id }];
 		});
 	};
 </script>
@@ -32,14 +59,18 @@
 			<div class="channel-name">{currentChannel.username}</div>
 			<div class="channel-subscribers">{currentChannel.age} iscritti</div>
 		</div>
-		{#if $subscriptions.includes(currentChannel.id)}
+		{#if user && $subscriptions.some((sub) => sub.subscriberId === user?.id && sub.channelId === currentChannel.id)}
 			<button on:click={handleSubscribe}>Disiscriviti</button>
 		{:else}
 			<button on:click={handleSubscribe}>Iscriviti</button>
 		{/if}
+
 		<div class="buttons-container">
-			<button on:click={handleLike}>Like</button>
-			<button>Dislike</button>
+			{#if user && $likedVideos.some((vid) => vid.likerId === user?.id && vid.videoId === currentVideo.id)}
+				<button on:click={handleLike}>Rimuovi like</button>
+			{:else}
+				<button on:click={handleLike}>Like</button>
+			{/if}
 			<button>Condividi</button>
 		</div>
 	</div>
@@ -48,7 +79,7 @@
 <style>
 	.video-details-container {
 		display: flex;
-		flex-grow: 1;
+		flex-grow: 0;
 	}
 
 	.video-title {
