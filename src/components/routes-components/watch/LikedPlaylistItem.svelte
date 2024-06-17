@@ -6,7 +6,7 @@
 </script>
 
 <a href={video.id} class="item-container" draggable="true" on:drag id={video.id} on:drop>
-	<img src="https://picsum.photos/300/200?random={user.id}" alt="" />
+	<img src="https://img.youtube.com/vi_webp/{video.id}/mqdefault.webp" alt="" />
 	<div class="details-container">
 		<h2>{video.title}</h2>
 		<p>@{user.username}</p>

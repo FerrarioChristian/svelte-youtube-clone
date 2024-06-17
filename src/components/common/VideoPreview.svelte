@@ -8,7 +8,7 @@
 	<a class="thumbnail" href="/watch/{videos[user.id - 1].id}">
 		<img
 			class="thumbnail-image"
-			src="https://picsum.photos/300/200?random={user.id}"
+			src={`https://img.youtube.com/vi_webp/${videos[user.id - 1].id}/mqdefault.webp`}
 			alt="thumbnail"
 		/>
 	</a>
@@ -43,11 +43,11 @@
 	.thumbnail-image {
 		width: 100%;
 		height: 100%;
-		min-width: 300px;
-		min-height: 200px;
+		min-width: 320px;
+		min-height: 180px;
 		border-radius: 0.5rem;
 		background-color: #ccc;
-		object-fit: cover;
+		object-fit: fill;
 	}
 
 	.thumbnail {

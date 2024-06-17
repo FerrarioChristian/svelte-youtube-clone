@@ -19,7 +19,7 @@
 			<div class="video-container">
 				<iframe
 					title="YouTube video player"
-					src={`https://www.youtube.com/embed/dQw4w9WgXcQ`}
+					src={`https://www.youtube.com/embed/${currentVideo.id}`}
 					frameborder="0"
 					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 					allowfullscreen
